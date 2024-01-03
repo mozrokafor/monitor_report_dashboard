@@ -1,10 +1,10 @@
 import Container from "@/components/Container";
 import SuitePage from "@/components/suiteComponents/SuitePage";
 import { Metadata } from "next";
-import getFullSuite from "./actions/getFullSuite";
 import moment from "moment";
 import { ArrowBigDown, ArrowBigUp } from "lucide-react";
-import getFullSuiteHistory from "./actions/getFullSuiteHistory";
+import getFullSuite from "../actions/getFullSuite";
+import getFullSuiteHistory from "../actions/getFullSuiteHistory";
 import Link from "next/link";
 import { buttonVariants } from "@/components/ui/button";
 import Navbar from "@/components/Navbar";
@@ -16,7 +16,7 @@ export const metadata: Metadata = {
 
 export default async function Home() {
   // @ts-ignore
-  const { data, trend, latestData, testSuiteRuns, healthPercentage, browsers } =
+  const { data, trend, latestData, testSuiteRuns, healthPercentage } =
     await getFullSuite();
   const results = await getFullSuiteHistory();
 
@@ -41,18 +41,11 @@ export default async function Home() {
         <span className="font-bold mr-1">Last Run:</span>
         <span>{moment(data[data.length - 1].endTime).format("LLL")}</span>
       </div>
-      <Container className="grid grid-cols-1 md:grid-cols-5 gap-6 mt-1">
+      <Container className="grid grid-cols-1 md:grid-cols-4 gap-6 mt-1">
         <div className="bg-white shadow rouned-xl p-4 mt-4 h-40 flex items-center justify-center mx-6">
           <div className="font-black text-3xl flex flex-col items-center">
             <span>{Math.floor(healthPercentage)}%</span>
             <span className="text-sm">Healthy</span>
-          </div>
-        </div>
-
-        <div className="bg-white shadow rouned-xl p-4 mt-4 h-40 flex items-center justify-center mx-6">
-          <div className="font-black text-4xl flex flex-col items-center">
-            <span>{data.length}</span>
-            <span className="text-sm">Total Tests</span>
           </div>
         </div>
 
@@ -84,7 +77,6 @@ export default async function Home() {
           suites={data}
           flakes={results?.flakes[0]}
           failures={results?.failures[0]}
-          browsers={browsers}
         />
       </Container>
     </>
