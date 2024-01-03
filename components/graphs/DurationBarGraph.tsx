@@ -35,7 +35,7 @@ const DurationBarGraph = ({ chartData }: any) => {
     },
   };
 
-  const labels = chartData.map((data: { endTime: any }) =>
+  const labels = chartData?.map((data: { endTime: any }) =>
     moment(data.endTime).format("lll")
   );
 
@@ -44,7 +44,7 @@ const DurationBarGraph = ({ chartData }: any) => {
     datasets: [
       {
         label: "Average Test Duration",
-        data: chartData.map((data: { averageTestDuration: number }) =>
+        data: chartData?.map((data: { averageTestDuration: number }) =>
           convertToSecs(data.averageTestDuration).toFixed(2)
         ),
         borderColor: "#17ca80",

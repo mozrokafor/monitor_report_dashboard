@@ -12,7 +12,7 @@ interface SuitePageProps {
   suiteRuns: any;
   failures: any[];
   flakes: any[];
-  browsers: any[];
+  browsers?: any[];
 }
 
 const headers = ["status", "title", "browser", "duration"];

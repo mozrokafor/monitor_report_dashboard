@@ -19,7 +19,7 @@ const Dashboards = () => {
         </TabsContent>
 
         <TabsContent value="suite" className="w-full">
-          <SuitePage data={{}} />
+          Temp
         </TabsContent>
       </Tabs>
     </div>
