@@ -17,7 +17,7 @@ interface SuitePageProps {
 }
 
 const headers = ["status", "title", "browser", "duration"];
-const historyHeaders = ["status", "title", "browser", "duration", "time"];
+const historyHeaders = ["status", "title", "browser", "time"];
 
 const SuitePage = ({
   runs,

@@ -23,13 +23,12 @@ ChartJS.register(
 );
 
 const DurationBarGraphBrowsers = ({ chartData }: any) => {
-  console.log({ chartData });
   const options = {
     responsive: true,
     plugins: {
       title: {
         display: true,
-        text: "Monitor e2e fdsfAvg Execution Times - (Chromium - Firefox - Webkit)",
+        text: "Monitor e2e Execution Times (in Seconds) - (Chromium - Firefox - Webkit)",
       },
       responsive: true,
       maintainAspectRaio: false,
@@ -58,24 +57,24 @@ const DurationBarGraphBrowsers = ({ chartData }: any) => {
         data: chromeData?.map((data: { duration: number }) =>
           convertToSecs(data.duration).toFixed(2)
         ),
-        borderColor: "#17ca80",
-        backgroundColor: "#17ca80",
+        borderColor: "#1aa260",
+        backgroundColor: "#1aa260",
       },
       {
         label: "Firefox",
         data: firefoxData?.map((data: { duration: number }) =>
           convertToSecs(data.duration).toFixed(2)
         ),
-        borderColor: "red",
-        backgroundColor: "red",
+        borderColor: "#E66000",
+        backgroundColor: "#E66000",
       },
       {
         label: "Safari",
         data: safariData?.map((data: { duration: number }) =>
           convertToSecs(data.duration).toFixed(2)
         ),
-        borderColor: "blue",
-        backgroundColor: "blue",
+        borderColor: "#0FB5EE",
+        backgroundColor: "#0FB5EE",
       },
     ],
   };

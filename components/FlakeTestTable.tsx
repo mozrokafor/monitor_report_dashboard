@@ -1,3 +1,4 @@
+import moment from "moment";
 import { _convertTime } from "@/lib/utils";
 import {
   Table,
@@ -14,6 +15,7 @@ interface TestTableProps {
 }
 
 const FlakeTestTable = ({ headers, tests }: TestTableProps) => {
+  console.log({ tests });
   return (
     <>
       <h1 className="text-xl font-bold text-center py-3">Flakiness History</h1>
@@ -33,8 +35,8 @@ const FlakeTestTable = ({ headers, tests }: TestTableProps) => {
               <TableRow key={idx}>
                 {headers.map((header, idx) => (
                   <TableCell key={idx}>
-                    {header === "duration"
-                      ? _convertTime(test[header])
+                    {header === "time"
+                      ? moment(test[header]).format("lll")
                       : test[header]}
                   </TableCell>
                 ))}

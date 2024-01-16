@@ -11,6 +11,8 @@ export default async function getFullSuiteHistory() {
 
     const [failures, flakes] = await Promise.all(allRequests);
 
+    // console.log("failures:: ", failures);
+
     return {
       failures,
       flakes,

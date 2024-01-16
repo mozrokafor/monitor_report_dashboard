@@ -1,4 +1,5 @@
-import { _convertTime } from "@/lib/utils";
+import moment from "moment";
+import { _convertTime, cn } from "@/lib/utils";
 import {
   Table,
   TableBody,
@@ -32,9 +33,15 @@ const FailuresTestTable = ({ headers, tests }: TestTableProps) => {
             {tests.map((test, idx) => (
               <TableRow key={idx}>
                 {headers.map((header, idx) => (
-                  <TableCell key={idx}>
-                    {header === "duration"
-                      ? _convertTime(test[header])
+                  <TableCell
+                    key={idx}
+                    className={cn("text-sm", {
+                      capitalize: header !== "title",
+                      "text-xs": header === "time",
+                    })}
+                  >
+                    {header === "time"
+                      ? moment(test[header]).format("lll")
                       : test[header]}
                   </TableCell>
                 ))}

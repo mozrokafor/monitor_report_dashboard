@@ -24,6 +24,7 @@ ChartJS.register(
 );
 
 const StatusLineGraph = ({ chartData }: any) => {
+  console.log({ chartData });
   const options = {
     responsive: true,
     plugins: {
@@ -53,6 +54,13 @@ const StatusLineGraph = ({ chartData }: any) => {
   const labels = chartData.map((data: { endTime: any }) =>
     moment(data.endTime).format("lll")
   );
+
+  // console.log(
+  //   "line 58",
+  //   chartData.map((data: { endTime: any }) =>
+  //     moment(data.endTime).format("lll")
+  //   )
+  // );
 
   const data = {
     labels,

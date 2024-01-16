@@ -30,10 +30,13 @@ export default async function getFullSuite() {
   const latestData = data[data.length - 1];
 
   const testSuiteRuns = compileTests(latestData.suites);
-  const healthPercentage = calculateHealthPercentage(latestData);
-  const trend = getTrend(data);
   const suites = data.map((d) => d.suites);
   const testNumber = countTests(suites);
+  const healthPercentage = calculateHealthPercentage(
+    testNumber.fCount,
+    testNumber.tCount
+  );
+  const trend = getTrend(data);
   const trimmedSuites = buildSuites(suites);
   const browsers = browserStats(data);
 
@@ -45,14 +48,16 @@ export default async function getFullSuite() {
     healthPercentage,
     trend,
     suites: trimmedSuites,
-    testNumber,
+    testNumber: testNumber.tCount,
+    testNumberFailures: testNumber.fCount,
+    testNumberFlakes: testNumber.flCount,
     browsers,
   };
 }
 
-const calculateHealthPercentage = (latestData: any) => {
-  const total = latestData.totalTests - latestData.testsSkipped;
-  const passed = latestData.testsPassed;
+const calculateHealthPercentage = (latestData: any, testNumber: number) => {
+  const total = testNumber;
+  const passed = testNumber - latestData;
 
   return (passed / total) * 100;
 };
@@ -197,18 +202,29 @@ const browserStats = (data: any) => {
 
 const countTests = (data: any) => {
   let tCount = 0;
+  let fCount = 0;
+  let flCount = 0;
   for (let i = 0; i < data.length; i++) {
     let tempCount = 0;
+    let tempFCount = 0;
+    let tempFlakeCount = 0;
     const runTests = data[i];
+    const tests = runTests[i].tests;
 
     for (let j = 0; j < runTests.length; j++) {
       tempCount += runTests[j].tests.length;
+
+      // reduce would prob be more efficient here, however readibility is more important for this project in general
+      tempFCount += tests.filter((t) => t.status === "failed").length;
+
+      tempFlakeCount += tests.filter((t) => t.status === "flaky").length;
     }
 
     tCount += tempCount;
+    fCount += tempFCount;
   }
 
-  return tCount;
+  return { tCount, fCount, flCount };
 };
 
 const buildSuites = (suites: ISuite[]) => {

@@ -26,6 +26,8 @@ export default async function Home() {
     browsers,
     suites,
     testNumber,
+    testNumberFailures,
+    testNumberFlakes,
   } = await getFullSuite();
   const results = await getFullSuiteHistory();
 
@@ -67,14 +69,14 @@ export default async function Home() {
 
         <div className="bg-white shadow rouned-xl p-4 mt-4 h-40 flex items-center justify-center mx-6">
           <div className="font-black text-4xl flex flex-col items-center">
-            <span>{latestData.testsFlaky}</span>
+            <span>{testNumberFlakes}</span>
             <span className="text-sm">Flaky Tests</span>
           </div>
         </div>
 
         <div className="bg-white shadow rouned-xl p-4 mt-4 h-40 flex items-center justify-center mx-6">
           <div className="font-black text-4xl flex flex-col items-center">
-            <span>{latestData.testsFailed}</span>
+            <span>{testNumberFailures}</span>
             <span className="text-sm">Failed Tests</span>
           </div>
         </div>
@@ -93,7 +95,7 @@ export default async function Home() {
           runs={runs}
           suites={suites}
           flakes={results?.flakes[0]}
-          failures={results?.failures[0]}
+          failures={results?.failures[1]}
           browsers={browsers}
         />
       </Container>
