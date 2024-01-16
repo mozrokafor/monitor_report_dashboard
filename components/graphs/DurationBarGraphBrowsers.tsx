@@ -23,20 +23,31 @@ ChartJS.register(
 );
 
 const DurationBarGraphBrowsers = ({ chartData }: any) => {
+  console.log({ chartData });
   const options = {
     responsive: true,
     plugins: {
       title: {
         display: true,
-        text: "Monitor e2e Avg Execution Times - (Chromium - Firefox - Webkit)",
+        text: "Monitor e2e fdsfAvg Execution Times - (Chromium - Firefox - Webkit)",
       },
       responsive: true,
       maintainAspectRaio: false,
     },
   };
 
-  const labels = chartData?.map((data: { endTime: any }) =>
-    moment(data.endTime).format("lll")
+  const chromeData = chartData.filter(
+    (d: { browser: string }) => d.browser === "chrome"
+  );
+  const firefoxData = chartData.filter(
+    (d: { browser: string }) => d.browser === "firefox"
+  );
+  const safariData = chartData.filter(
+    (d: { browser: string }) => d.browser === "safari"
+  );
+
+  const labels = chromeData?.map((data: { timeStamp: any }) =>
+    moment(data.timeStamp).format("lll")
   );
 
   const data = {
@@ -44,24 +55,24 @@ const DurationBarGraphBrowsers = ({ chartData }: any) => {
     datasets: [
       {
         label: "Chrome",
-        data: chartData?.map((data: { averageTestDuration: number }) =>
-          convertToSecs(data.averageTestDuration).toFixed(2)
+        data: chromeData?.map((data: { duration: number }) =>
+          convertToSecs(data.duration).toFixed(2)
         ),
         borderColor: "#17ca80",
         backgroundColor: "#17ca80",
       },
       {
         label: "Firefox",
-        data: chartData?.map((data: { averageTestDuration: number }) =>
-          convertToSecs(data.averageTestDuration).toFixed(2)
+        data: firefoxData?.map((data: { duration: number }) =>
+          convertToSecs(data.duration).toFixed(2)
         ),
         borderColor: "red",
         backgroundColor: "red",
       },
       {
         label: "Safari",
-        data: chartData?.map((data: { averageTestDuration: number }) =>
-          convertToSecs(data.averageTestDuration).toFixed(2)
+        data: safariData?.map((data: { duration: number }) =>
+          convertToSecs(data.duration).toFixed(2)
         ),
         borderColor: "blue",
         backgroundColor: "blue",

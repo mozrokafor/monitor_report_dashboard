@@ -43,7 +43,7 @@ const SuitePage = ({
           <StatusLineGraph chartData={runs} />
         </Container>
         <Container className="border h-[50vh] rounded-lg flex items-center">
-          <DurationBarGraphBrowsers chartData={runs} />
+          <DurationBarGraphBrowsers chartData={browsers} />
         </Container>
       </div>
       <div className="w-full flex flex-row justify-between gap-10 mb-20">

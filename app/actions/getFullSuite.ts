@@ -35,8 +35,7 @@ export default async function getFullSuite() {
   const suites = data.map((d) => d.suites);
   const testNumber = countTests(suites);
   const trimmedSuites = buildSuites(suites);
-
-  // console.log("trimmedsuites: ", trimmedSuites);
+  const browsers = browserStats(data);
 
   return {
     runs: data,
@@ -47,7 +46,7 @@ export default async function getFullSuite() {
     trend,
     suites: trimmedSuites,
     testNumber,
-    // browsers,
+    browsers,
   };
 }
 
@@ -118,61 +117,82 @@ const browserStats = (data: any) => {
   let ffArry = [];
   let chArry = [];
   let wbArry = [];
+  let mainBrowserArr = [];
 
-  console.log("line 104", data[0]);
+  // console.log("line 104", data[0]);
 
+  // loop through the main object, get durations reduced and number of tests added per browser
   for (let i = 0; i < data.length; i++) {
-    const suites = data[i].suites;
-    let firefox = {
-      timeStamp: data[i].endTime,
+    const run = data[i];
+
+    const chromeBrowserRunObject = {
+      timeStamp: run.endTime,
+      enviroment: run.environment,
+      browser: "chrome",
+      passed: true,
       duration: 0,
+      tests: 0,
     };
-    let chromium = {
-      timeStamp: data[i].endTime,
+
+    const firefoxBrowserRunObject = {
+      timeStamp: run.endTime,
+      enviroment: run.environment,
+      browser: "firefox",
+      passed: true,
       duration: 0,
+      tests: 0,
     };
-    let webkit = {
-      timeStamp: data[i].endTime,
+
+    const safariBrowserRunObject = {
+      timeStamp: run.endTime,
+      enviroment: run.environment,
+      browser: "safari",
+      passed: true,
       duration: 0,
+      tests: 0,
     };
-    for (let j = 0; j < suites.length; j++) {
-      const tests = suites[j].tests;
-      for (let k = 0; k < tests.length; k++) {
-        const test = tests[k];
+
+    for (let j = 0; j < run.suites.length; j++) {
+      const suite = run.suites[j];
+
+      // loop through tests
+      for (let k = 0; k < suite.tests.length; k++) {
+        const test = suite.tests[k];
 
         switch (test.browser) {
           case "chromium":
-            chromium += test.duration;
+            chromeBrowserRunObject.duration =
+              chromeBrowserRunObject.duration + test.duration;
+            chromeBrowserRunObject.passed = test.status === "passed";
+            chromeBrowserRunObject.tests++;
             break;
-
           case "firefox":
-            firefox += test.duration;
+            firefoxBrowserRunObject.duration =
+              firefoxBrowserRunObject.duration + test.duration;
+            firefoxBrowserRunObject.passed = test.status === "passed";
+            firefoxBrowserRunObject.tests++;
             break;
-
           case "webkit":
-            webkit += test.duration;
+            safariBrowserRunObject.duration =
+              safariBrowserRunObject.duration + test.duration;
+            safariBrowserRunObject.passed = test.status === "passed";
+            safariBrowserRunObject.tests++;
             break;
 
           default:
             break;
         }
       }
-
-      firefox.duration = Number((firefox.duration / tests.length).toFixed(2));
-      webkit.duration = Number((webkit.duration / tests.length).toFixed(2));
-      chromium.duration = Number((chromium.duration / tests.length).toFixed(2));
     }
 
-    ffArry.push(firefox);
-    wbArry.push(webkit);
-    chArry.push(chromium);
+    mainBrowserArr.push(
+      chromeBrowserRunObject,
+      firefoxBrowserRunObject,
+      safariBrowserRunObject
+    );
   }
 
-  return {
-    chromium: chArry,
-    firefox: ffArry,
-    webkit: wbArry,
-  };
+  return mainBrowserArr;
 };
 
 const countTests = (data: any) => {
