@@ -15,7 +15,6 @@ interface TestTableProps {
 }
 
 const FlakeTestTable = ({ headers, tests }: TestTableProps) => {
-  console.log({ tests });
   return (
     <>
       <h1 className="text-xl font-bold text-center py-3">Flakiness History</h1>

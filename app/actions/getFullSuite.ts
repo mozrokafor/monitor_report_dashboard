@@ -5,6 +5,7 @@ interface ISuite {
   duration: number;
   tests: number;
   passed: true;
+  failedCount: number;
 }
 
 interface ISuites {
@@ -26,7 +27,6 @@ export default async function getFullSuite() {
   }
 
   const data: any[] = await res.json();
-  console.log("data lengtrh", data.length);
   const latestData = data[data.length - 1];
 
   const testSuiteRuns = compileTests(latestData.suites);
@@ -229,56 +229,43 @@ const countTests = (data: any) => {
 
 const buildSuites = (suites: ISuite[]) => {
   const fSuites: ISuite[] = suites.flat();
+
+  // array of components
   let mainArr = [];
-  const mainObj = {} as ISuite;
 
+  // loop throught flat tests array
   for (let i = 0; i < fSuites.length; i++) {
-    let passed = true;
-    const title = fSuites[i].title;
+    const compObject = fSuites[i];
 
-    if (mainObj[title] === undefined) {
-      fSuites[i].tests.forEach((el) => {
-        if (el.status !== "passed") {
-          passed = false;
-        }
-      }),
-        // havent added yet
-        (mainObj[title] = {
-          title,
-          duration: fSuites[i].duration,
-          tests: fSuites[i].tests.length,
-          passed: passed,
-        });
-      const temp = {
-        title,
-        duration: fSuites[i].duration,
-        tests: fSuites[i].tests.length,
-        passed: passed,
-      };
-      mainArr.push(temp);
+    // count failures
+    const currentFailedCount = fSuites[i].tests.filter(
+      (d) => d.status === "failed"
+    ).length;
+
+    // check if component object exists in mainarr
+    const idx = _checkExists(mainArr, compObject);
+    const temp = {
+      title: fSuites[i].title,
+      duration: fSuites[i].duration,
+      tests: fSuites[i].tests.length,
+      passed: currentFailedCount < 1,
+      failedCount: currentFailedCount,
+    };
+
+    if (idx >= 0) {
+      temp.duration = fSuites[i].duration + mainArr[idx].duration;
+      temp.failedCount = currentFailedCount + mainArr[idx].failedCount;
+      temp.tests = fSuites[i].tests.length + mainArr[idx].tests;
+
+      mainArr[idx] = temp;
     } else {
-      // already added, update data
-      mainObj[title] = {
-        title: fSuites[i].title,
-        duration: mainObj[title].duration + fSuites[i].duration,
-        tests: mainObj[title].tests + fSuites[i].tests.length,
-        passed: passed,
-      };
-
-      const temp = {
-        title: fSuites[i].title,
-        duration: mainObj[title].duration + fSuites[i].duration,
-        tests: mainObj[title].tests + fSuites[i].tests.length,
-        passed: passed,
-      };
-
-      const idx = mainArr.findIndex((ma) => ma.title === temp.title);
-
-      if (idx !== -1) {
-        mainArr[idx] = temp;
-      }
+      mainArr.push(temp);
     }
   }
 
   return mainArr;
+};
+
+const _checkExists = (oldArr: any[], searchObject: any) => {
+  return oldArr.findIndex((old) => old.title === searchObject.title);
 };

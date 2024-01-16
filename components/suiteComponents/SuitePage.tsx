@@ -14,6 +14,7 @@ interface SuitePageProps {
   flakes: any[];
   browsers?: any[];
   suites: any[];
+  latest: any;
 }
 
 const headers = ["status", "title", "browser", "duration"];
@@ -26,6 +27,7 @@ const SuitePage = ({
   flakes,
   browsers,
   suites,
+  latest,
 }: SuitePageProps) => {
   return (
     <div>
@@ -35,7 +37,7 @@ const SuitePage = ({
           (Latest Run)
         </span>
         <Container className="flex items-center w-[60vw]">
-          <ComponentGrid runs={suites} />
+          <ComponentGrid runs={suites} latest={latest} />
         </Container>
       </div>
       <div className="w-full flex flex-row justify-between gap-10 mb-20">

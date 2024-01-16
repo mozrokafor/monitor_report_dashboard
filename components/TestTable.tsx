@@ -1,4 +1,4 @@
-import { _convertTime } from "@/lib/utils";
+import { _convertTime, cn } from "@/lib/utils";
 import {
   Table,
   TableBody,
@@ -34,7 +34,16 @@ const TestTable = ({ headers, tests }: TestTableProps) => {
             {tests.map((test, idx) => (
               <TableRow key={idx}>
                 {headers.map((header, idx) => (
-                  <TableCell key={idx}>
+                  <TableCell
+                    key={idx}
+                    className={cn("text-sm", {
+                      "bg-green-600": test.status === "passed",
+                      "bg-red-600": test.status === "failed",
+                      "bg-yellow-400": test.status === "skipped",
+                      "bg-zinc-400": test.status === "timedOut",
+                      capitalize: header !== "title",
+                    })}
+                  >
                     {header === "duration"
                       ? _convertTime(test[header])
                       : test[header]}

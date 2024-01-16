@@ -3,6 +3,7 @@ import Grid from "../Grid";
 
 interface ComponentGridProps {
   runs: any;
+  latest: any;
 }
 
 interface RunProps {
@@ -10,12 +11,14 @@ interface RunProps {
   duration: number;
   tests: number;
   passed: boolean;
+  failedCount: number;
 }
 
-const ComponentGrid = ({ runs }: ComponentGridProps) => {
+// displays green if latest passed, red failure number
+const ComponentGrid = ({ runs, latest }: ComponentGridProps) => {
   return (
     <div className="grid grid-cols-2 gap-4 w-full h-full">
-      {runs.map(({ title, duration, tests, passed }: RunProps) => {
+      {runs.map(({ title, duration, tests, passed, failedCount }: RunProps) => {
         const returnBox = (testNumber: number) => {
           if (testNumber >= 80) {
             return "h-[250px]";
@@ -39,7 +42,15 @@ const ComponentGrid = ({ runs }: ComponentGridProps) => {
             )}
           >
             <div className="capitalize">{title}</div>
-            <div className="text-xs text-zinc-100">({tests} Tests)</div>
+            <div className="text-xs text-zinc-100 mt-2">({tests} Tests)</div>
+            <div
+              className={cn("text-red-500 text-xs", {
+                hidden: passed,
+                "text-red-300": !passed,
+              })}
+            >
+              ({failedCount} Failures )
+            </div>
           </div>
         );
       })}

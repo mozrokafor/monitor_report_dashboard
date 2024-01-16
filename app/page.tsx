@@ -97,6 +97,7 @@ export default async function Home() {
           flakes={results?.flakes[0]}
           failures={results?.failures[1]}
           browsers={browsers}
+          latest={latestData}
         />
       </Container>
     </>

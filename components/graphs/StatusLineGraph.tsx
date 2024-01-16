@@ -24,7 +24,6 @@ ChartJS.register(
 );
 
 const StatusLineGraph = ({ chartData }: any) => {
-  console.log({ chartData });
   const options = {
     responsive: true,
     plugins: {
