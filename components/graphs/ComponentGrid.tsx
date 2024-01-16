@@ -15,7 +15,7 @@ interface RunProps {
 
 const ComponentGrid = ({ runs }: ComponentGridProps) => {
   return (
-    <div className="grid grid-cols-2 md:grid-cols-3 gap-4 w-full h-full">
+    <div className="grid grid-cols-2 gap-4 w-full h-full">
       {runs.map(({ title, duration, tests, passed }: RunProps) => {
         const returnBox = (testNumber: number) => {
           if (testNumber >= 80) {
@@ -40,9 +40,7 @@ const ComponentGrid = ({ runs }: ComponentGridProps) => {
             )}
           >
             <div className="capitalize">{title}</div>
-            <div className="text-xs text-zinc-100">
-              ({convertToSecs(duration).toFixed(2)} seconds)
-            </div>
+            <div className="text-xs text-zinc-100">({tests} Tests)</div>
           </div>
         );
       })}

@@ -31,8 +31,12 @@ const SuitePage = ({
 }: SuitePageProps) => {
   return (
     <div>
-      <div className="w-full flex flex-row justify-between gap-10 mb-20">
-        <Container className="flex items-center">
+      <div className="w-full mb-20">
+        <h1 className="text-center underline font-bold text-xl">Components</h1>
+        <span className="text-center flex items-center justify-center text-xs text-zinc-500">
+          (Latest Run)
+        </span>
+        <Container className="flex items-center w-[60vw]">
           <ComponentGrid runs={suites} />
         </Container>
       </div>
