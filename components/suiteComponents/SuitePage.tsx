@@ -1,12 +1,10 @@
 import Container from "../Container";
 import FailuresTestTable from "../FailuresTestTable";
 import FlakeTestTable from "../FlakeTestTable";
-import SuitesGrid from "../SuitesGrid";
 import TestTable from "../TestTable";
 import ComponentGrid from "../graphs/ComponentGrid";
 import DurationBarGraph from "../graphs/DurationBarGraph";
 import DurationBarGraphBrowsers from "../graphs/DurationBarGraphBrowsers";
-import DurationBarGraphTotal from "../graphs/DurationBarGraphTotal";
 import StatusLineGraph from "../graphs/StatusLineGraph";
 
 interface SuitePageProps {

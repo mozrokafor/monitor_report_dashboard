@@ -1,6 +1,5 @@
 import { _convertTime, cn, convertToSecs } from "@/lib/utils";
 import Grid from "../Grid";
-import SuitesGrid from "../SuitesGrid";
 
 interface ComponentGridProps {
   runs: any;

@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 import Container from "@/components/Container";
 import SuitePage from "@/components/suiteComponents/SuitePage";
 import { Metadata } from "next";
@@ -16,8 +18,16 @@ export const metadata: Metadata = {
 
 export default async function Home() {
   // @ts-ignore
-  const { data, trend, latestData, testSuiteRuns, healthPercentage } =
-    await getFullSuite();
+  const {
+    runs,
+    trend,
+    latestData,
+    testSuiteRuns,
+    healthPercentage,
+    browsers,
+    suites,
+    testNumber,
+  } = await getFullSuite();
   const results = await getFullSuiteHistory();
 
   const renderTrend = (trend: string) => {
@@ -39,7 +49,7 @@ export default async function Home() {
 
       <div className="text-zinc-400 text-xs ml-16 mt-10">
         <span className="font-bold mr-1">Last Run:</span>
-        <span>{moment(data[data.length - 1].endTime).format("LLL")}</span>
+        <span>{moment(runs[runs.length - 1].endTime).format("LLL")}</span>
       </div>
       <Container className="grid grid-cols-1 md:grid-cols-4 gap-6 mt-1">
         <div className="bg-white shadow rouned-xl p-4 mt-4 h-40 flex items-center justify-center mx-6">
@@ -74,9 +84,11 @@ export default async function Home() {
       <Container>
         <SuitePage
           suiteRuns={testSuiteRuns}
-          suites={data}
+          runs={runs}
+          suites={suites}
           flakes={results?.flakes[0]}
           failures={results?.failures[0]}
+          browsers={browsers}
         />
       </Container>
     </>
