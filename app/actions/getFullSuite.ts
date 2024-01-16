@@ -1,3 +1,16 @@
+// @ts-nocheck
+
+interface ISuite {
+  title: string;
+  duration: number;
+  tests: number;
+  passed: true;
+}
+
+interface ISuites {
+  suites: ISuite[];
+}
+
 export default async function getFullSuite() {
   const res = await fetch(
     "https://raw.githubusercontent.com/mozilla/blurts-server/e2e-report/full_test_report.json",
@@ -13,22 +26,27 @@ export default async function getFullSuite() {
   }
 
   const data: any[] = await res.json();
+  console.log("data lengtrh", data.length);
   const latestData = data[data.length - 1];
 
   const testSuiteRuns = compileTests(latestData.suites);
   const healthPercentage = calculateHealthPercentage(latestData);
   const trend = getTrend(data);
-  // const browsers = browserStats(data);
+  const suites = data.map((d) => d.suites);
+  const testNumber = countTests(suites);
+  const trimmedSuites = buildSuites(suites);
 
-  // console.log({ browsers });
+  // console.log("trimmedsuites: ", trimmedSuites);
 
   return {
-    data,
+    runs: data,
     isHealthy: latestData === 0 ? "Healthy" : "Not Healthy",
     latestData,
     testSuiteRuns,
     healthPercentage,
     trend,
+    suites: trimmedSuites,
+    testNumber,
     // browsers,
   };
 }
@@ -101,18 +119,20 @@ const browserStats = (data: any) => {
   let chArry = [];
   let wbArry = [];
 
+  console.log("line 104", data[0]);
+
   for (let i = 0; i < data.length; i++) {
     const suites = data[i].suites;
     let firefox = {
-      timeStamp: suites.endTime,
+      timeStamp: data[i].endTime,
       duration: 0,
     };
     let chromium = {
-      timeStamp: suites.endTime,
+      timeStamp: data[i].endTime,
       duration: 0,
     };
     let webkit = {
-      timeStamp: suites.endTime,
+      timeStamp: data[i].endTime,
       duration: 0,
     };
     for (let j = 0; j < suites.length; j++) {
@@ -153,4 +173,76 @@ const browserStats = (data: any) => {
     firefox: ffArry,
     webkit: wbArry,
   };
+};
+
+const countTests = (data: any) => {
+  let tCount = 0;
+  for (let i = 0; i < data.length; i++) {
+    let tempCount = 0;
+    const runTests = data[i];
+
+    for (let j = 0; j < runTests.length; j++) {
+      tempCount += runTests[j].tests.length;
+    }
+
+    tCount += tempCount;
+  }
+
+  return tCount;
+};
+
+const buildSuites = (suites: ISuite[]) => {
+  const fSuites: ISuite[] = suites.flat();
+  let mainArr = [];
+  const mainObj = {} as ISuite;
+
+  for (let i = 0; i < fSuites.length; i++) {
+    let passed = true;
+    const title = fSuites[i].title;
+
+    if (mainObj[title] === undefined) {
+      fSuites[i].tests.forEach((el) => {
+        if (el.status !== "passed") {
+          passed = false;
+        }
+      }),
+        // havent added yet
+        (mainObj[title] = {
+          title,
+          duration: fSuites[i].duration,
+          tests: fSuites[i].tests.length,
+          passed: passed,
+        });
+      const temp = {
+        title,
+        duration: fSuites[i].duration,
+        tests: fSuites[i].tests.length,
+        passed: passed,
+      };
+      mainArr.push(temp);
+    } else {
+      // already added, update data
+      mainObj[title] = {
+        title: fSuites[i].title,
+        duration: mainObj[title].duration + fSuites[i].duration,
+        tests: mainObj[title].tests + fSuites[i].tests.length,
+        passed: passed,
+      };
+
+      const temp = {
+        title: fSuites[i].title,
+        duration: mainObj[title].duration + fSuites[i].duration,
+        tests: mainObj[title].tests + fSuites[i].tests.length,
+        passed: passed,
+      };
+
+      const idx = mainArr.findIndex((ma) => ma.title === temp.title);
+
+      if (idx !== -1) {
+        mainArr[idx] = temp;
+      }
+    }
+  }
+
+  return mainArr;
 };

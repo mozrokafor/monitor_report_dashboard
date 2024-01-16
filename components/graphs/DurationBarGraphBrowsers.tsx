@@ -23,7 +23,6 @@ ChartJS.register(
 );
 
 const DurationBarGraphBrowsers = ({ chartData }: any) => {
-  console.log({ chartData });
   const options = {
     responsive: true,
     plugins: {
@@ -39,16 +38,33 @@ const DurationBarGraphBrowsers = ({ chartData }: any) => {
   const labels = chartData?.map((data: { endTime: any }) =>
     moment(data.endTime).format("lll")
   );
-  // const labels = ["Chromium", "Firefox", "Webkit"];
 
   const data = {
     labels,
     datasets: [
       {
-        label: "Average Test Duration Per Browser",
-        data: chartData?.map((data: number) => convertToSecs(data).toFixed(2)),
+        label: "Chrome",
+        data: chartData?.map((data: { averageTestDuration: number }) =>
+          convertToSecs(data.averageTestDuration).toFixed(2)
+        ),
         borderColor: "#17ca80",
         backgroundColor: "#17ca80",
+      },
+      {
+        label: "Firefox",
+        data: chartData?.map((data: { averageTestDuration: number }) =>
+          convertToSecs(data.averageTestDuration).toFixed(2)
+        ),
+        borderColor: "red",
+        backgroundColor: "red",
+      },
+      {
+        label: "Safari",
+        data: chartData?.map((data: { averageTestDuration: number }) =>
+          convertToSecs(data.averageTestDuration).toFixed(2)
+        ),
+        borderColor: "blue",
+        backgroundColor: "blue",
       },
     ],
   };
