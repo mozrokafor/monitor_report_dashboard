@@ -56,7 +56,7 @@ export default async function Home() {
         <div className="bg-white shadow rouned-xl p-4 mt-4 h-40 flex items-center justify-center mx-6">
           <div className="font-black text-3xl flex flex-col items-center">
             <span>{Math.floor(healthPercentage)}%</span>
-            <span className="text-sm">Healthy</span>
+            <span className="text-sm">Passing Rate</span>
           </div>
         </div>
 
@@ -85,7 +85,7 @@ export default async function Home() {
           {/* // this can be a line graph icon thats going up or down */}
           <div className="font-black text-4xl flex flex-col items-center">
             <span>{renderTrend(trend)}</span>
-            <span className="text-sm capitalize">{trend} Health Trend</span>
+            <span className="text-sm capitalize">{trend} Trend</span>
           </div>
         </div>
       </Container>

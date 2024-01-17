@@ -8,6 +8,12 @@ import {
   TableHeader,
   TableRow,
 } from "./ui/table";
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "./ui/collapsible";
+import React from "react";
 
 interface TestTableProps {
   headers: string[];
@@ -31,21 +37,33 @@ const FailuresTestTable = ({ headers, tests }: TestTableProps) => {
           </TableHeader>
           <TableBody>
             {tests.map((test, idx) => (
-              <TableRow key={idx}>
-                {headers.map((header, idx) => (
-                  <TableCell
-                    key={idx}
-                    className={cn("text-sm", {
-                      capitalize: header !== "title",
-                      "text-xs": header === "time",
-                    })}
-                  >
-                    {header === "time"
-                      ? moment(test[header]).format("lll")
-                      : test[header]}
+              <React.Fragment key={idx}>
+                <TableRow key={idx}>
+                  {headers.map((header, idx) => (
+                    <TableCell
+                      key={idx}
+                      className={cn("text-sm", {
+                        capitalize: header !== "title",
+                        "text-xs": header === "time",
+                      })}
+                    >
+                      {header === "time"
+                        ? moment(test[header]).format("lll")
+                        : test[header]}
+                    </TableCell>
+                  ))}
+                  <TableCell>
+                    <Collapsible>
+                      <CollapsibleTrigger className="border-b min-w-[100px]">
+                        Expand Error
+                      </CollapsibleTrigger>
+                      <CollapsibleContent className="text-white py-6 px-3 bg-black mt-6 min-w-[260px] animate-in transition-all duration-300 whitespace-pre-wrap">
+                        <code>{test.errors[0].stack}</code>
+                      </CollapsibleContent>
+                    </Collapsible>
                   </TableCell>
-                ))}
-              </TableRow>
+                </TableRow>
+              </React.Fragment>
             ))}
           </TableBody>
         </Table>

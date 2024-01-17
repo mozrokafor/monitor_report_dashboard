@@ -114,7 +114,6 @@ const compileTests = (suites: any[]) => {
   }
 
   const flatMap = allTests.flat();
-  console.log("line 35: ", flatMap.length);
   return flatMap;
 };
 
@@ -123,8 +122,6 @@ const browserStats = (data: any) => {
   let chArry = [];
   let wbArry = [];
   let mainBrowserArr = [];
-
-  // console.log("line 104", data[0]);
 
   // loop through the main object, get durations reduced and number of tests added per browser
   for (let i = 0; i < data.length; i++) {

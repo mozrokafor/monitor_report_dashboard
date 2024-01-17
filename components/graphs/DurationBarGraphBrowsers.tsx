@@ -33,6 +33,18 @@ const DurationBarGraphBrowsers = ({ chartData }: any) => {
       responsive: true,
       maintainAspectRaio: false,
     },
+    scales: {
+      x: {
+        ticks: {
+          stepSize: 2,
+        },
+      },
+      y: {
+        ticks: {
+          callback: (value: any) => value + " seconds",
+        },
+      },
+    },
   };
 
   const chromeData = chartData.filter(

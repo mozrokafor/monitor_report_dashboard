@@ -38,12 +38,11 @@ const StatusLineGraph = ({ chartData }: any) => {
       x: {
         ticks: {
           stepSize: 2,
-          callback: (value: any) => moment(value.datess).format("ll"),
         },
       },
       y: {
         ticks: {
-          stepSize: 2,
+          stepSize: 5,
           callback: (value: any) => value + " tests",
         },
       },
@@ -54,12 +53,7 @@ const StatusLineGraph = ({ chartData }: any) => {
     moment(data.endTime).format("lll")
   );
 
-  // console.log(
-  //   "line 58",
-  //   chartData.map((data: { endTime: any }) =>
-  //     moment(data.endTime).format("lll")
-  //   )
-  // );
+  console.log({ labels });
 
   const data = {
     labels,
